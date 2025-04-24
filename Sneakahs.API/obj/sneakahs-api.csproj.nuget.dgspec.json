@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\18082\\Desktop\\Projects\\Sneakahs-backend\\sneakahs-api\\sneakahs-api.csproj": {}
+    "C:\\Users\\18082\\Desktop\\Projects\\Sneakahs.Backend\\Sneakahs.API\\sneakahs-api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\18082\\Desktop\\Projects\\Sneakahs-backend\\sneakahs-api\\sneakahs-api.csproj": {
+    "C:\\Users\\18082\\Desktop\\Projects\\Sneakahs.Backend\\Sneakahs.API\\sneakahs-api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\18082\\Desktop\\Projects\\Sneakahs-backend\\sneakahs-api\\sneakahs-api.csproj",
+        "projectUniqueName": "C:\\Users\\18082\\Desktop\\Projects\\Sneakahs.Backend\\Sneakahs.API\\sneakahs-api.csproj",
         "projectName": "sneakahs-api",
-        "projectPath": "C:\\Users\\18082\\Desktop\\Projects\\Sneakahs-backend\\sneakahs-api\\sneakahs-api.csproj",
+        "projectPath": "C:\\Users\\18082\\Desktop\\Projects\\Sneakahs.Backend\\Sneakahs.API\\sneakahs-api.csproj",
         "packagesPath": "C:\\Users\\18082\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\18082\\Desktop\\Projects\\Sneakahs-backend\\sneakahs-api\\obj\\",
+        "outputPath": "C:\\Users\\18082\\Desktop\\Projects\\Sneakahs.Backend\\Sneakahs.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\18082\\AppData\\Roaming\\NuGet\\NuGet.Config"
