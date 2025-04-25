@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sneakahs.Domain\Sneakahs.Domain.csproj" />
+    <ProjectReference Include="..\Sneakahs.Application\Sneakahs.Application.csproj" />
   </ItemGroup>
 
 </Project>
