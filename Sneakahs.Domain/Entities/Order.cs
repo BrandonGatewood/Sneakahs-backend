@@ -1,30 +1,33 @@
 using System;
 using System.Collections.Generic;
-
-namespace Sneakahs.Domain.Entities;
+using Sneakahs.Domain.Common;
+using Sneakahs.Domain.Entities;
 
 /*
     Relationship Types:
     Many-to-One: Order -> User (User can have many orders)
     One-to-Many: Order -> OrderItem (An Order can have many OrderItems)
 */
-public class Order : BaseEntity
+namespace Sneakahs.Domain.Entities
 {
-    public Guid UserId { get; set; }
-    public User User { get; set; }  // Navigation property for User
-
-    public ICollection<OrderItem> OrderItems { get; set; } // Navigation property for OrderItems
-
-    public decimal TotalAmount
+    public class Order : BaseEntity
     {
-        get
-        {
-            return OrderItems?.Sum(item => item.Quantity * item.Product.Price) ?? 0m;
-        }
-    }
+        public Guid UserId { get; set; }
+        public required User User { get; set; }  // Navigation property for User
 
-    public string ShippingAddress { get; set; }
-    public string Status { get; set; }
-    public DateTime? ShippedAt { get; set; }
-    public DateTime OrderDate { get; set; }
+        public required ICollection<OrderItem> OrderItems { get; set; } // Navigation property for OrderItems
+
+        public decimal TotalAmount
+        {
+            get
+            {
+                return OrderItems?.Sum(item => item.Quantity * item.Product.Price) ?? 0m;
+            }
+        }
+
+        public required String ShippingAddress { get; set; }
+        public required String Status { get; set; }
+        public required DateTime? ShippedAt { get; set; }
+        public required DateTime OrderDate { get; set; }
+    }
 }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("sneakahs-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9609e5f9c3601f3169a7600be6eb071d19be4477")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+087bc05318f8370365e96f13929693767036cd87")]
 [assembly: System.Reflection.AssemblyProductAttribute("sneakahs-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("sneakahs-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
