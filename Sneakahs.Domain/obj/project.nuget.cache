@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "wu9szm8QwKQ=",
+  "dgSpecHash": "FsE/RiaTDMo=",
   "success": true,
   "projectFilePath": "C:\\Users\\18082\\Desktop\\Projects\\Sneakahs.Backend\\Sneakahs.Domain\\Sneakahs.Domain.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\18082\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512"
+  ],
   "logs": []
 }

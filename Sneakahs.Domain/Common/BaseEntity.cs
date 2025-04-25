@@ -1,19 +1,20 @@
 using System;
 
-namespace Sneakahs.Domain.Common;
-
 /*
     Abstract base class that provides common properties and behavior for all domain entities
 */
-public abstract class BaseEntity
+namespace Sneakahs.Domain.Common
 {
-    public Guid Id { get; } = Guid.NewGuid();
-    public DateTime CreatedAt { get; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; private set; }
-
-
-    public void UpdateTimeStamp()
+    public abstract class BaseEntity
     {
-        UpdatedAt = DateTime.UtcNow;
+        public Guid Id { get; protected set; } = Guid.NewGuid();
+        public DateTime CreatedAt { get; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; private set; }
+
+
+        public void UpdateTimeStamp()
+        {
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }
