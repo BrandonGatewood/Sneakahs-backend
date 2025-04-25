@@ -4,7 +4,7 @@ namespace Sneakahs.Application.DTO.UserDto
 {
     public class UserUpdateDto
     {
-        public String? Username { get; set; }
-        public String? Email { get; set; }
+        public string? Username { get; set; }
+        public string? Email { get; set; }
     }
 }
