@@ -52,3 +52,5 @@ C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.API\obj\Debug\net8.0\r
 C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.API\obj\Debug\net8.0\sneakahs-api.pdb
 C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.API\obj\Debug\net8.0\sneakahs-api.genruntimeconfig.cache
 C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.API\obj\Debug\net8.0\ref\sneakahs-api.dll
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.API\bin\Debug\net8.0\Sneakahs.Application.dll
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.API\bin\Debug\net8.0\Sneakahs.Application.pdb

@@ -13,6 +13,7 @@
           "Microsoft.EntityFrameworkCore": "9.0.4",
           "Npgsql": "9.0.3",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.4",
+          "Sneakahs.Application": "1.0.0",
           "Sneakahs.Domain": "1.0.0",
           "Swashbuckle.AspNetCore": "6.6.2"
         },
@@ -956,9 +957,18 @@
           "System.Xml.ReaderWriter": "4.3.0"
         }
       },
+      "Sneakahs.Application/1.0.0": {
+        "runtime": {
+          "Sneakahs.Application.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "Sneakahs.Domain/1.0.0": {
         "dependencies": {
-          "BCrypt.Net-Next": "4.0.3"
+          "BCrypt.Net-Next": "4.0.3",
+          "Microsoft.EntityFrameworkCore": "9.0.4"
         },
         "runtime": {
           "Sneakahs.Domain.dll": {
@@ -1674,6 +1684,11 @@
       "sha512": "sha512-5zJ0XDxAIg8iy+t4aMnQAu0MqVbqyvfoUVl1yDV61xdo3Vth45oA2FoY4pPkxYAH5f8ixpmTqXeEIya95x0aCQ==",
       "path": "system.xml.xdocument/4.3.0",
       "hashPath": "system.xml.xdocument.4.3.0.nupkg.sha512"
+    },
+    "Sneakahs.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "Sneakahs.Domain/1.0.0": {
       "type": "project",
