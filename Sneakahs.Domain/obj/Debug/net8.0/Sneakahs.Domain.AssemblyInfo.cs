@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sneakahs.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+89f47ad289689680cda05e03549b92b99ae39d3c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aa09873aff6ac7ca7019707fb5c54a9677a685a3")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sneakahs.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sneakahs.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

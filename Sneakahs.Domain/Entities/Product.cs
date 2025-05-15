@@ -12,11 +12,11 @@ namespace Sneakahs.Domain.Entities
 {
     public class Product : BaseEntity
     {
-        public required String Name { get; set; }
-        public required String Description { get; set; }
+        public required string Name { get; set; }
+        public required string Description { get; set; }
         public decimal Price {get; set; }
         public int StockQuantity { get; set; }
-        public required String ImageUrl { get; set; }
+        public required string ImageUrl { get; set; }
 
         // Navigation Property
         public required ICollection<OrderItem> OrderItems { get; set; }
