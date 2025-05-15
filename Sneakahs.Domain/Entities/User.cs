@@ -13,12 +13,26 @@ namespace Sneakahs.Domain.Entities
 {
     public class User : BaseEntity
     {
-        public required String Username { get; set; }
-        public required String Email { get; set; }
-        public required String HashedPassword { get; set; }
-        public required Cart Cart { get; set; }  // Navigation Property User
+        public String Username { get; private set; }
+        public String Email { get; private set; }
+        public String HashedPassword { get; private set; }
+        public Cart Cart { get; private set; }  // Navigation Property User
 
-        public ICollection<Order> Orders { get; set; } = new List<Order>();
+        public ICollection<Order> Orders { get; private set; } = new List<Order>();
+
+        public User() {}
+
+        // Constructor to initialize the required fields
+        public User(string username, string email, string rawPassword)
+        {
+            if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("Username cannot be empty.");
+            if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("Email cannot be empty.");
+            if (string.IsNullOrWhiteSpace(rawPassword)) throw new ArgumentException("Password cannot be empty.");
+
+            Username = username;
+            Email = email;
+            SetPassword(rawPassword); // Hash the password upon creation
+        }
 
         public void SetPassword(String rawPassword) {
             HashedPassword = BCrypt.Net.BCrypt.HashPassword(rawPassword);

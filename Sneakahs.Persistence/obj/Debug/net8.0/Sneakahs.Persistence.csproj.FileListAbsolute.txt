@@ -1,0 +1,16 @@
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\bin\Debug\net8.0\Sneakahs.Persistence.deps.json
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\bin\Debug\net8.0\Sneakahs.Persistence.dll
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\bin\Debug\net8.0\Sneakahs.Persistence.pdb
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\bin\Debug\net8.0\Sneakahs.Domain.dll
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\bin\Debug\net8.0\Sneakahs.Domain.pdb
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\obj\Debug\net8.0\Sneakahs.Persistence.csproj.AssemblyReference.cache
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\obj\Debug\net8.0\Sneakahs.Persistence.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\obj\Debug\net8.0\Sneakahs.Persistence.AssemblyInfoInputs.cache
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\obj\Debug\net8.0\Sneakahs.Persistence.AssemblyInfo.cs
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\obj\Debug\net8.0\Sneakahs.Persistence.csproj.CoreCompileInputs.cache
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\obj\Debug\net8.0\Sneakahs.Persistence.sourcelink.json
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\obj\Debug\net8.0\Sneakahs.9D657413.Up2Date
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\obj\Debug\net8.0\Sneakahs.Persistence.dll
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\obj\Debug\net8.0\refint\Sneakahs.Persistence.dll
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\obj\Debug\net8.0\Sneakahs.Persistence.pdb
+C:\Users\18082\Desktop\Projects\Sneakahs.Backend\Sneakahs.Persistence\obj\Debug\net8.0\ref\Sneakahs.Persistence.dll
