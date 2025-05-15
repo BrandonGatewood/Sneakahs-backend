@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sneakahs.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+32443dfeb785da90d5a918570db334b2884970f8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+89f47ad289689680cda05e03549b92b99ae39d3c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sneakahs.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sneakahs.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
