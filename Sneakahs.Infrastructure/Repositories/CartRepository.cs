@@ -63,7 +63,7 @@ namespace Sneakahs.Infrastructure.Repositories
         }
 
         // Create a new Cart for a new User
-        public async Task Create(Cart newCart)
+        public async Task CreateCart(Cart newCart)
         {
             await _context.Carts.AddAsync(newCart);
             await _context.SaveChangesAsync();

@@ -8,6 +8,6 @@ namespace Sneakahs.Application.Interfaces
         Task AddNewCartItem(CartItem newCartItem);
         Task UpdateCartItem(CartItem cartItem);
         Task Update(Cart updatedCart);
-        Task Create(Cart newCart);
+        Task CreateCart(Cart newCart);
     }
 }

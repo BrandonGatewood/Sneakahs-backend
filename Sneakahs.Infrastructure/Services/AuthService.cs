@@ -32,7 +32,7 @@ namespace Sneakahs.Infrastructure.Services
                 CartItems = [],
             };
 
-            await _cartRepository.Create(newCart);
+            await _cartRepository.CreateCart(newCart);
 
             var token = _jwtService.GenerateToken(user);
 
