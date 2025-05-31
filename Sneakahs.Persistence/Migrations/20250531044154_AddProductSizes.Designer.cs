@@ -12,8 +12,8 @@ using Sneakahs.Persistence.Data;
 namespace Sneakahs.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250515171010_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250531044154_AddProductSizes")]
+    partial class AddProductSizes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,6 +58,9 @@ namespace Sneakahs.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Size")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -156,15 +159,37 @@ namespace Sneakahs.Persistence.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("StockQuantity")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Sneakahs.Domain.Entities.ProductSize", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Size")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductSizes");
                 });
 
             modelBuilder.Entity("Sneakahs.Domain.Entities.User", b =>
@@ -213,7 +238,7 @@ namespace Sneakahs.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Sneakahs.Domain.Entities.Product", "Product")
-                        .WithMany("CartItems")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -243,12 +268,23 @@ namespace Sneakahs.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Sneakahs.Domain.Entities.Product", "Product")
-                        .WithMany("OrderItems")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Sneakahs.Domain.Entities.ProductSize", b =>
+                {
+                    b.HasOne("Sneakahs.Domain.Entities.Product", "Product")
+                        .WithMany("Sizes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
                 });
@@ -265,9 +301,7 @@ namespace Sneakahs.Persistence.Migrations
 
             modelBuilder.Entity("Sneakahs.Domain.Entities.Product", b =>
                 {
-                    b.Navigation("CartItems");
-
-                    b.Navigation("OrderItems");
+                    b.Navigation("Sizes");
                 });
 
             modelBuilder.Entity("Sneakahs.Domain.Entities.User", b =>

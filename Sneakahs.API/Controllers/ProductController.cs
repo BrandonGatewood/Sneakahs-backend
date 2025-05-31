@@ -17,15 +17,15 @@ namespace Sneakahs.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProducts()
         {
-            var productDtos = await _productService.GetAllProducts();
+            var productDtos = await _productService.GetAllProductsDto();
 
             return Ok(productDtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> getProductById(Guid id)
+        public async Task<IActionResult> GetProductById(Guid id)
         {
-            var productDto = await _productService.GetProductById(id);
+            var productDto = await _productService.GetProductDto(id);
 
             if (productDto == null)
             {

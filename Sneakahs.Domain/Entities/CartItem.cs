@@ -1,6 +1,4 @@
-using System;
 using Sneakahs.Domain.Common;
-using Sneakahs.Domain.Entities;
 
 /*
     Relationship Types:
@@ -11,12 +9,13 @@ namespace Sneakahs.Domain.Entities
 {
     public class CartItem : BaseEntity
     {
-        public Guid CartId { get; set; }
+        public required Guid CartId { get; set; }
         public required Cart Cart { get; set; }  // Navigation property for Cart
 
-        public Guid ProductId { get; set; }
+        public required Guid ProductId { get; set; }
         public required Product Product { get; set; }    // Navigation property for Product
 
-        public int Quantity { get; set; }
+        public decimal Size { get; set; }
+        public required int Quantity { get; set; }
     }
 }

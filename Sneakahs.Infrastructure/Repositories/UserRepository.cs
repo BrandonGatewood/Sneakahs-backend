@@ -20,6 +20,11 @@ namespace Sneakahs.Infrastructure.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        public async Task<User?> FindById(Guid id)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        }
+
         public async Task AddUser(User user)
         {
             await _context.Users.AddAsync(user);
