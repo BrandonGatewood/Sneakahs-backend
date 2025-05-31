@@ -6,7 +6,7 @@ namespace Sneakahs.Domain.Entities
     public class Cart : BaseEntity
     {
         public required Guid UserId { get; set; }
-        public required User User { get; set; }     // Navigation property for User
+        public User? User { get; set; }     // Navigation property for User
         public required ICollection<CartItem> CartItems { get; set; } = [];
         public int Quantity
         {

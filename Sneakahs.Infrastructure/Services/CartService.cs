@@ -17,31 +17,24 @@ using Microsoft.Identity.Client;
 */
 namespace Sneakahs.Infrastructure.Services
 {
-    public class CartService(ICartRepository cartRepository, IProductRepository productRepository, IUserRepository userRepository) : ICartService
+    public class CartService(ICartRepository cartRepository, IProductRepository productRepository) : ICartService
     {
         private readonly ICartRepository _cartRepository = cartRepository;
         private readonly IProductRepository _productRepository = productRepository;
-        private readonly IUserRepository _userRepository = userRepository;
 
         // Find the Cart associated with userId
-        public async Task<Result<CartDto>> GetCartDto(Guid userId)
+        public async Task<CartDto> GetCartDto(Guid userId)
         {
-            Result<Cart> cartResult = await CheckCart(userId);
-
-            if (!cartResult.Success)
-                return Result<CartDto>.Fail(cartResult.Error);
+            Cart cart = await CheckCart(userId);
 
             // Converts cart to CartDto before returning
-            return Result<CartDto>.Ok(ToDto(cartResult.Data));
+            return ToDto(cart);
         }
 
         // Add CartItem to Cart thats associated with userId
         public async Task<Result<CartDto>> AddCartItem(Guid userId, CartItemRequestDto cartItemRequestDto)
         {
-            // Check if Cart exist for User
-            Result<Cart> cartResult = await CheckCart(userId);
-            if (!cartResult.Success)
-                return Result<CartDto>.Fail(cartResult.Error);
+            Cart cart = await CheckCart(userId);
 
             // Check if Product exists
             Result<Product> productResult = await CheckProduct(cartItemRequestDto.ProductId);
@@ -50,7 +43,7 @@ namespace Sneakahs.Infrastructure.Services
 
             try
             {
-                (CartItem cartItem, bool isNew) = cartResult.Data.AddCartItem(productResult.Data, cartItemRequestDto.Quantity, cartItemRequestDto.Size);
+                (CartItem cartItem, bool isNew) = cart.AddCartItem(productResult.Data, cartItemRequestDto.Quantity, cartItemRequestDto.Size);
 
                 // Check if CartItem is new or already exists in Users Cart
                 if (isNew)
@@ -58,7 +51,7 @@ namespace Sneakahs.Infrastructure.Services
                 else
                     await _cartRepository.UpdateCartItem(cartItem);
 
-                return Result<CartDto>.Ok(ToDto(cartResult.Data));
+                return Result<CartDto>.Ok(ToDto(cart));
             }
             catch (ArgumentException ex)
             {
@@ -70,40 +63,14 @@ namespace Sneakahs.Infrastructure.Services
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         // Update CartItem to Cart thats associated with userId
         public async Task<Result<CartDto>> UpdateCartItem(Guid userId, Guid productId, CartItemUpdateDto cartItemUpdateDto)
         {
-            Result<Cart> cartResult = await CheckCart(userId);
-
-            if (!cartResult.Success)
-                return Result<CartDto>.Fail(cartResult.Error);
+            Cart cart = await CheckCart(userId);
 
             try
             {
-                cartResult.Data.UpdateCartItemQuantity(productId, cartItemUpdateDto.Quantity);
+                cart.UpdateCartItemQuantity(productId, cartItemUpdateDto.Quantity);
             }
             catch (KeyNotFoundException ex)
             {
@@ -114,35 +81,47 @@ namespace Sneakahs.Infrastructure.Services
                 return Result<CartDto>.Fail(ex.Message);
             }
 
-            await _cartRepository.Update(cartResult.Data);
+            await _cartRepository.Update(cart);
 
-            return Result<CartDto>.Ok(ToDto(cartResult.Data));
+            return Result<CartDto>.Ok(ToDto(cart));
         }
 
         // Clears Cart thats associated with userId
-        public async Task<Result<CartDto>> ClearCart(Guid userId)
+        public async Task<CartDto> ClearCart(Guid userId)
         {
-            Result<Cart> cartResult = await CheckCart(userId);
+            Cart cart = await CheckCart(userId);
 
-            if (!cartResult.Success)
-                return Result<CartDto>.Fail(cartResult.Error);
+            cart.ClearCart();
 
-            cartResult.Data.ClearCart();
-            await _cartRepository.Update(cartResult.Data);
+            await _cartRepository.Update(cart);
 
-            return Result<CartDto>.Ok(ToDto(cartResult.Data));
+            return ToDto(cart);
         }
 
         // ------------- Helper Functions -------------
         // Checks if Cart exists. Although, every user has a Cart.
-        private async Task<Result<Cart>> CheckCart(Guid userId)
+        private async Task<Cart> CheckCart(Guid userId)
         {
             Cart? cart = await _cartRepository.GetCart(userId);
 
-            if (cart == null)
-                return Result<Cart>.Fail("Cart not found");
+            // if cart == null
+            cart ??= await CreateCart(userId);
 
-            return Result<Cart>.Ok(cart);
+            return cart;
+        }
+
+        // Creates a new Cart for User 
+        private async Task<Cart> CreateCart(Guid userId)
+        {
+            Cart cart = new()
+            {
+                UserId = userId,
+                CartItems = []
+            };
+
+            await _cartRepository.Create(cart);
+
+            return cart;
         }
 
         // Checks if Product exists

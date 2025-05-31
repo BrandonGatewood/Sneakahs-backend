@@ -31,11 +31,11 @@ namespace Sneakahs.API.Controllers
         // GET /cart
         // Retrieves the Cart for the authenticated User.
         [HttpGet]
-        public async Task<IActionResult> FindCart()
+        public async Task<IActionResult> GetCart()
         {
-            Result<CartDto> cartDtoResult = await _cartService.GetCartDto(UserId);
+            CartDto cartDto = await _cartService.GetCartDto(UserId);
 
-            return Ok(cartDtoResult.Data);
+            return Ok(cartDto);
         }
 
         // Post /cart/cartItem
@@ -69,9 +69,9 @@ namespace Sneakahs.API.Controllers
         [HttpDelete("items")]
         public async Task<IActionResult> ClearCart()
         {
-            Result<CartDto> cartDto = await _cartService.ClearCart(UserId);
+            CartDto cartDto = await _cartService.ClearCart(UserId);
 
-            return Ok(cartDto.Data);
+            return Ok(cartDto);
         }
     }
 }
