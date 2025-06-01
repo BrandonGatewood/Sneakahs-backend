@@ -64,13 +64,21 @@ namespace Sneakahs.Infrastructure.Services
         }
 
         // Update CartItem to Cart thats associated with userId
-        public async Task<Result<CartDto>> UpdateCartItem(Guid userId, Guid productId, CartItemUpdateDto cartItemUpdateDto)
+        public async Task<Result<CartDto>> UpdateCartItem(Guid userId, Guid cartItemId, CartItemUpdateDto cartItemUpdateDto)
         {
             Cart cart = await CheckCart(userId);
 
+            // Check if Product exists
+            Result<Product> productResult = await CheckProduct(cartItemUpdateDto.ProductId);
+            if (!productResult.Success)
+                return Result<CartDto>.Fail(productResult.Error);
+
             try
             {
-                cart.UpdateCartItemQuantity(productId, cartItemUpdateDto.Quantity);
+                CartItem updatedCartItem = cart.UpdateCartItemQuantity(cartItemId, productResult.Data, cartItemUpdateDto.Quantity);
+                await _cartRepository.UpdateCartItem(updatedCartItem);
+
+                return Result<CartDto>.Ok(ToDto(cart));
             }
             catch (KeyNotFoundException ex)
             {
@@ -80,10 +88,10 @@ namespace Sneakahs.Infrastructure.Services
             {
                 return Result<CartDto>.Fail(ex.Message);
             }
-
-            await _cartRepository.Update(cart);
-
-            return Result<CartDto>.Ok(ToDto(cart));
+            catch (InvalidOperationException ex)
+            {
+                return Result<CartDto>.Fail(ex.Message);
+            }
         }
 
         // Clears Cart thats associated with userId
@@ -139,7 +147,7 @@ namespace Sneakahs.Infrastructure.Services
             {
                 CartItems = [.. cart.CartItems.Select(ci => new CartItemDto
                 {
-                    ProductId = ci.ProductId,
+                    Id = ci.Id,
                     ProductName = ci.Product.Name,
                     Price = ci.Product.Price,
                     Size = ci.Size,

@@ -2,7 +2,7 @@ namespace Sneakahs.Application.DTO.CartItemDto
 {
     public class CartItemDto
     {
-        public required Guid ProductId { get; set; }
+        public required Guid Id { get; set; }
         public required string ProductName { get; set; }
         public decimal Price { get; set; }
         public decimal Size { get; set; }

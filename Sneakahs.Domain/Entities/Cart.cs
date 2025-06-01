@@ -64,19 +64,25 @@ namespace Sneakahs.Domain.Entities
             }
         }
 
-
-
-        public void UpdateCartItemQuantity(Guid productId, int newQuantity)
+        public CartItem UpdateCartItemQuantity(Guid cartItemId, Product product, int newQuantity)
         {
-            CartItem? cartItem = CartItems.FirstOrDefault(ci => ci.ProductId == productId) ?? throw new KeyNotFoundException($"Item with product ID {productId} not found.");
+            CartItem? cartItem = CartItems.SingleOrDefault(ci => ci.Id == cartItemId) ?? throw new KeyNotFoundException($"CartItem with Id {cartItemId} not found.");
 
             if (newQuantity < 0)
                 throw new ArgumentException("Quantity cannot be negative.", nameof(newQuantity));
 
             if (newQuantity == 0)
+            {
                 CartItems.Remove(cartItem);
-            else
-                cartItem.Quantity = newQuantity;
+                return cartItem;
+            }
+
+            int availableQuantity = product.GetAvailableQuantityForSize(cartItem.Size);
+            if (newQuantity > availableQuantity)
+                throw new InvalidOperationException($"Not enough stock. Available: {availableQuantity}");
+
+            cartItem.Quantity = newQuantity;
+            return cartItem;
         }
 
         public void ClearCart()
