@@ -3,8 +3,6 @@ using Sneakahs.Application.DTO.CartItemDto;
 using Sneakahs.Application.Interfaces;
 using Sneakahs.Domain.Entities;
 using Sneakahs.Application.Common;
-using Sneakahs.Infrastructure.Repositories;
-using Microsoft.Identity.Client;
 
 /*
     CartService contains the business logic for handling Carts.

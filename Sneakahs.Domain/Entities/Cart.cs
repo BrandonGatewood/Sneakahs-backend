@@ -1,4 +1,3 @@
-using System.Data;
 using Sneakahs.Domain.Common;
 
 namespace Sneakahs.Domain.Entities
