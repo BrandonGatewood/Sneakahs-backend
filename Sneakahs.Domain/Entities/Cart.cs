@@ -24,11 +24,9 @@ namespace Sneakahs.Domain.Entities
 
         public (CartItem, bool isNew) AddCartItem(Product product, int quantity, decimal size)
         {
-            ArgumentNullException.ThrowIfNull(product);
-
             // Checks if requested quantity is positive  
             if (quantity <= 0)
-                throw new ArgumentException("Quantity must be positive.", nameof(quantity));
+                throw new ArgumentException("Quantity must be positive.");
 
             int availableQuantity = product.GetAvailableQuantityForSize(size);
             CartItem? existingCartItem = CartItems.FirstOrDefault(ci => ci.ProductId == product.Id && ci.Size == size);
@@ -68,7 +66,7 @@ namespace Sneakahs.Domain.Entities
             CartItem? cartItem = CartItems.SingleOrDefault(ci => ci.Id == cartItemId) ?? throw new KeyNotFoundException($"CartItem with Id {cartItemId} not found.");
 
             if (newQuantity < 0)
-                throw new ArgumentException("Quantity cannot be negative.", nameof(newQuantity));
+                throw new ArgumentException("Quantity cannot be negative.");
 
             if (newQuantity == 0)
             {
