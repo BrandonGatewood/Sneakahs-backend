@@ -7,6 +7,7 @@ namespace Sneakahs.Application.Interfaces
         Task<Cart?> GetCart(Guid userId);
         Task AddNewCartItem(CartItem newCartItem);
         Task UpdateCartItem(CartItem cartItem);
+        Task RemoveCartItem(CartItem cartItem);
         Task Update(Cart updatedCart);
         Task CreateCart(Cart newCart);
     }

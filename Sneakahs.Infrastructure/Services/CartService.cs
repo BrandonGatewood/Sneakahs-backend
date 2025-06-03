@@ -92,6 +92,24 @@ namespace Sneakahs.Infrastructure.Services
             }
         }
 
+        public async Task<Result<CartDto>> RemoveCartItem(Guid userId, Guid cartItemId)
+        {
+            Cart cart = await CheckCart(userId);
+
+            try
+            {
+                CartItem cartItem = cart.RemoverCartItem(cartItemId);
+
+                await _cartRepository.RemoveCartItem(cartItem);
+
+                return Result<CartDto>.Ok(ToDto(cart));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Result<CartDto>.Fail(ex.Message);
+            }
+        }
+
         // Clears Cart thats associated with userId
         public async Task<CartDto> ClearCart(Guid userId)
         {

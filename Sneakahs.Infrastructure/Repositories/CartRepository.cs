@@ -38,22 +38,12 @@ namespace Sneakahs.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        // Delete CartItem from Users Cart
+        public async Task RemoveCartItem(CartItem cartItem)
+        {
+            _context.CartItems.Remove(cartItem);
+            await _context.SaveChangesAsync();
+        }
 
         // Update existing User's Cart with updatedCart
         public async Task Update(Cart updatedCart)

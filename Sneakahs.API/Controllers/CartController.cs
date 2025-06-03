@@ -65,6 +65,19 @@ namespace Sneakahs.API.Controllers
         }
 
         // Delete /cart/items
+        // Deletes a CartItem in the authenticated Users Cart
+        [HttpDelete("items/{cartItemId}")]
+        public async Task<IActionResult> RemoveCartItem(Guid cartItemId)
+        {
+            Result<CartDto> cartDtoResult = await _cartService.RemoveCartItem(UserId, cartItemId);
+
+            if (!cartDtoResult.Success)
+                return NotFound(new { message = cartDtoResult.Error });
+
+            return Ok(cartDtoResult.Data);
+        }
+
+        // Delete /cart/items
         // Clears the authenticated Users Cart
         [HttpDelete("items")]
         public async Task<IActionResult> ClearCart()

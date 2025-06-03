@@ -82,6 +82,15 @@ namespace Sneakahs.Domain.Entities
             return cartItem;
         }
 
+        public CartItem RemoverCartItem(Guid cartItemId)
+        {
+            CartItem cartItem = CartItems.SingleOrDefault(ci => ci.Id == cartItemId) ?? throw new KeyNotFoundException($"CartItem with Id {cartItemId} not found.");
+
+            CartItems.Remove(cartItem);
+
+            return cartItem;
+        }
+
         public void ClearCart()
         {
             CartItems.Clear();
