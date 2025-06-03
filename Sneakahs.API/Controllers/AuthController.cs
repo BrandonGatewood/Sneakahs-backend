@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Sneakahs.Application.Common;
 using Sneakahs.Application.DTO.AuthDto;
 using Sneakahs.Application.Interfaces.Services;
 
@@ -6,39 +7,34 @@ namespace Sneakahs.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController(IAuthService authService) : ControllerBase
     {
-        private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
-        {
-            _authService = authService;
-        }
+        private readonly IAuthService _authService = authService;
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto userRegisterDto)
         {
-            if(!ModelState.IsValid) 
+            Result<UserResponseDto> result = await _authService.RegisterUser(userRegisterDto);
+
+            if (!result.Success)
             {
-                return BadRequest(ModelState);
+                return BadRequest(result.Error);
             }
 
-            var result = await _authService.RegisterUser(userRegisterDto);
-
-            return Ok(result);
+            return Ok(result.Data);
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
         {
+            Result<UserResponseDto> result = await _authService.LoginUser(userLoginDto);
 
-            if(!ModelState.IsValid) 
+            if (!result.Success)
             {
-                return BadRequest(ModelState);
+                return BadRequest(result.Error);
             }
 
-            var result = await _authService.LoginUser(userLoginDto);
-
-            return Ok(result);
+            return Ok(result.Data);
         }
     }
 }
