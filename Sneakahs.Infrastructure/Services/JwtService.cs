@@ -1,8 +1,6 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Sneakahs.Application.Interfaces.Services;
 using Sneakahs.Domain.Entities;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -20,18 +18,19 @@ namespace Sneakahs.Infrastructure.Services
         // Generate JWT for user authentication
         public string GenerateToken(User user) {
             // Claims based on user data
-            var claims = new[]
-            {
+            Claim[] claims =
+            [
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
-            };
+            ];
 
             // Get the secret key
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secret));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             // Generate the token
-            var token = new JwtSecurityToken(
+            JwtSecurityToken token = new
+            (
                 issuer: _issuer,
                 audience: _audience,
                 claims: claims,
@@ -74,7 +73,9 @@ namespace Sneakahs.Infrastructure.Services
                 return null;
             }
         }
-        public string GenerateRefreshToken() {
+
+        public string GenerateRefreshToken()
+        {
             var randomBytes = new byte[32];
 
             using (var rng = RandomNumberGenerator.Create())
