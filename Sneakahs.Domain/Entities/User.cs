@@ -1,8 +1,4 @@
-using BCrypt.Net;
-using System;
-using System.Collections.Generic;
 using Sneakahs.Domain.Common;
-using Sneakahs.Domain.Entities;
 
 /*
     Relationship Types:
@@ -13,12 +9,12 @@ namespace Sneakahs.Domain.Entities
 {
     public class User : BaseEntity
     {
-        public String Username { get; private set; }
-        public String Email { get; private set; }
-        public String HashedPassword { get; private set; }
-        public Cart Cart { get; private set; }  // Navigation Property User
+        public string Username { get; private set; } = default!;
+        public string Email { get; private set; } = default!;
+        public string HashedPassword { get; private set; } = default!;
+        public Cart? Cart { get; private set; }
 
-        public ICollection<Order> Orders { get; private set; } = new List<Order>();
+        public ICollection<Order> Orders { get; private set; } = [];
 
         public User() {}
 
@@ -32,13 +28,18 @@ namespace Sneakahs.Domain.Entities
             Username = username;
             Email = email;
             SetPassword(rawPassword); // Hash the password upon creation
+            Cart = new Cart
+            {
+                UserId = this.Id,
+                CartItems = []
+            };
         }
 
-        public void SetPassword(String rawPassword) {
+        public void SetPassword(string rawPassword) {
             HashedPassword = BCrypt.Net.BCrypt.HashPassword(rawPassword);
         }
 
-        public bool CheckPassword(String rawPassword) {
+        public bool CheckPassword(string rawPassword) {
             return BCrypt.Net.BCrypt.Verify(rawPassword, HashedPassword);
         }
     }

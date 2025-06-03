@@ -6,7 +6,7 @@ namespace Sneakahs.Application.Interfaces.Services
     public interface IJwtService
     {
         string GenerateToken(User user);
-        ClaimsPrincipal? validateToken(string token);
-        string generateRefreshToken();
+        ClaimsPrincipal? ValidateToken(string token);
+        string GenerateRefreshToken();
     }
 }

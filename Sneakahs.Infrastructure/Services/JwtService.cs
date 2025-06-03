@@ -11,19 +11,11 @@ using System.Text;
 // JWT Creation, Token Validation, JWT secret handling.
 namespace Sneakahs.Infrastructure.Services
 {
-    public class JwtService : IJwtService
+    public class JwtService(string secret, string issuer, string audience) : IJwtService
     {
-        private readonly string _secret;
-        private readonly string _issuer; 
-        private readonly string _audience;
-
-        // Constructor to inject Iconfiguration
-        public JwtService(string secret, string issuer, string audience)
-        {
-            _secret = secret;
-            _issuer = issuer;
-            _audience = audience;
-        }
+        private readonly string _secret = secret;
+        private readonly string _issuer = issuer; 
+        private readonly string _audience = audience;
 
         // Generate JWT for user authentication
         public string GenerateToken(User user) {
@@ -51,7 +43,7 @@ namespace Sneakahs.Infrastructure.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public ClaimsPrincipal? validateToken(string token)
+        public ClaimsPrincipal? ValidateToken(string token)
         {
             try
             {
@@ -82,7 +74,7 @@ namespace Sneakahs.Infrastructure.Services
                 return null;
             }
         }
-        public string generateRefreshToken() {
+        public string GenerateRefreshToken() {
             var randomBytes = new byte[32];
 
             using (var rng = RandomNumberGenerator.Create())

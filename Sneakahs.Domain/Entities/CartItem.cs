@@ -1,10 +1,5 @@
 using Sneakahs.Domain.Common;
 
-/*
-    Relationship Types:
-    Many-to-One: CartItem -> Cart (Each CartItem belongs in one Order)
-    Many-to-One: CartItem -> Product (Each CartItem references one Product)
-*/
 namespace Sneakahs.Domain.Entities
 {
     public class CartItem : BaseEntity

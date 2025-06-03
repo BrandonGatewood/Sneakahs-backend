@@ -1,5 +1,3 @@
-using System;
-
 namespace Sneakahs.Application.DTO.AuthDto
 {
     public class UserRegisterDto

@@ -1,5 +1,3 @@
-using System;
-
 /*
     Abstract base class that provides common properties and behavior for all domain entities
 */

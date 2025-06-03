@@ -1,14 +1,5 @@
 using Sneakahs.Domain.Common;
 
-/*
-    add a list of sizes
-    whats the difference between ICollection and List
-
-    so far this needs to be implmemnted in the following files:
-    CartService.cs
-    ProductService.cs
-
-*/
 namespace Sneakahs.Domain.Entities
 {
     public class Product : BaseEntity

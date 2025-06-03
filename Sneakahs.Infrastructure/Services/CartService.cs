@@ -62,7 +62,7 @@ namespace Sneakahs.Infrastructure.Services
             }
         }
 
-        // Update CartItem to Cart thats associated with userId
+        // Update CartItem from the Cart thats associated with userId
         public async Task<Result<CartDto>> UpdateCartItem(Guid userId, Guid cartItemId, CartItemUpdateDto cartItemUpdateDto)
         {
             Cart cart = await CheckCart(userId);
@@ -93,6 +93,7 @@ namespace Sneakahs.Infrastructure.Services
             }
         }
 
+        // Removes CartItem from the Cart associated with userId
         public async Task<Result<CartDto>> RemoveCartItem(Guid userId, Guid cartItemId)
         {
             Cart cart = await CheckCart(userId);

@@ -14,25 +14,24 @@ namespace Sneakahs.Infrastructure.Services
         // Register a new user
         public async Task<UserResponseDto> RegisterUser(UserRegisterDto registerDto)
         {
-            var existingUser = await _userRepository.GetUserByEmail(registerDto.Email);
+            User? existingUser = await _userRepository.GetUserByEmail(registerDto.Email);
 
             if (existingUser != null)
                 throw new Exception("User already exists.");
 
-            var user = new User(registerDto.Username, registerDto.Email, registerDto.Password);  // Create user with hashed password
+            User user = new(registerDto.Username, registerDto.Email, registerDto.Password);  // Create user with hashed password
             await _userRepository.AddUser(user);  // Save user to database
 
             // Create new Cart for User and save it to the database
-            var newCart = new Cart 
+            Cart newCart = new() 
             {
                 UserId = user.Id,
-                User = user,
                 CartItems = [],
             };
 
             await _cartRepository.CreateCart(newCart);
 
-            var token = _jwtService.GenerateToken(user);
+            string token = _jwtService.GenerateToken(user);
 
             return new UserResponseDto {
                 Username = user.Username,

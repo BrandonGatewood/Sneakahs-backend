@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using Sneakahs.Domain.Common;
-using Sneakahs.Domain.Entities;
 
 /*
     Relationship Types:
