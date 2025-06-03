@@ -1,6 +1,7 @@
 using DotNetEnv;
 using Sneakahs.Persistence.Data;
-using Sneakahs.Application.Interfaces;
+using Sneakahs.Application.Interfaces.Repositories;
+using Sneakahs.Application.Interfaces.Services;
 using Sneakahs.Infrastructure.Services;
 using Sneakahs.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;

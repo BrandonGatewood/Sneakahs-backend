@@ -1,9 +1,7 @@
-using Sneakahs.Application.Interfaces;
+using Sneakahs.Application.Interfaces.Services;
+using Sneakahs.Application.Interfaces.Repositories;
 using Sneakahs.Application.DTO.AuthDto;
 using Sneakahs.Domain.Entities;
-using Sneakahs.Persistence.Data;
-using System;
-using System.Threading.Tasks;
 
 namespace Sneakahs.Infrastructure.Services
 {

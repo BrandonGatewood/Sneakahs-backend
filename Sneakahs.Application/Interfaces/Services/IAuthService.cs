@@ -1,7 +1,6 @@
 using Sneakahs.Application.DTO.AuthDto;
-using System.Threading.Tasks;
 
-namespace Sneakahs.Application.Interfaces
+namespace Sneakahs.Application.Interfaces.Services
 {
     public interface IAuthService
     {

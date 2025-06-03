@@ -1,7 +1,6 @@
 using Sneakahs.Domain.Entities;
-using System.Threading.Tasks;
 
-namespace Sneakahs.Application.Interfaces
+namespace Sneakahs.Application.Interfaces.Repositories
 {
     public interface IUserRepository
     {

@@ -1,7 +1,7 @@
 using Sneakahs.Domain.Entities;
 using System.Security.Claims;
 
-namespace Sneakahs.Application.Interfaces
+namespace Sneakahs.Application.Interfaces.Services
 {
     public interface IJwtService
     {

@@ -1,6 +1,6 @@
 using Sneakahs.Domain.Entities;
 
-namespace Sneakahs.Application.Interfaces
+namespace Sneakahs.Application.Interfaces.Repositories
 {
     public interface ICartRepository
     {

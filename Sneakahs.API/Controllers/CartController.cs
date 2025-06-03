@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sneakahs.Application.Common;
 using Sneakahs.Application.DTO.CartDto;
 using Sneakahs.Application.DTO.CartItemDto;
-using Sneakahs.Application.Interfaces;
+using Sneakahs.Application.Interfaces.Services;
 
 // CartController handles HTTP requests related to Users Cart using JWT for authentication
 namespace Sneakahs.API.Controllers

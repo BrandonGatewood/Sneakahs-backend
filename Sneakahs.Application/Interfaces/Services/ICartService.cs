@@ -2,7 +2,7 @@ using Sneakahs.Application.Common;
 using Sneakahs.Application.DTO.CartDto;
 using Sneakahs.Application.DTO.CartItemDto;
 
-namespace Sneakahs.Application.Interfaces
+namespace Sneakahs.Application.Interfaces.Services
 {
     public interface ICartService
     {

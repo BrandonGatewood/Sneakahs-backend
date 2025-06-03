@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Sneakahs.Application.Interfaces;
+using Sneakahs.Application.Interfaces.Services;
 
 namespace Sneakahs.API.Controllers
 {

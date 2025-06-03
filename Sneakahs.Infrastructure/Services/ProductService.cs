@@ -1,7 +1,8 @@
 using Sneakahs.Application.Common;
 using Sneakahs.Application.DTO.ProductDto;
 using Sneakahs.Application.DTO.ProductSizeDto;
-using Sneakahs.Application.Interfaces;
+using Sneakahs.Application.Interfaces.Repositories;
+using Sneakahs.Application.Interfaces.Services;
 using Sneakahs.Domain.Entities;
 
 namespace Sneakahs.Infrastructure.Services

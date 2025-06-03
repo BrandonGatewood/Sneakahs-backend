@@ -1,6 +1,7 @@
 using Sneakahs.Application.DTO.CartDto;
 using Sneakahs.Application.DTO.CartItemDto;
-using Sneakahs.Application.Interfaces;
+using Sneakahs.Application.Interfaces.Repositories;
+using Sneakahs.Application.Interfaces.Services;
 using Sneakahs.Domain.Entities;
 using Sneakahs.Application.Common;
 

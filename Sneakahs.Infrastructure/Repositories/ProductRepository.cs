@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Sneakahs.Application.Interfaces;
+using Sneakahs.Application.Interfaces.Repositories;
 using Sneakahs.Domain.Entities;
 using Sneakahs.Persistence.Data;
 

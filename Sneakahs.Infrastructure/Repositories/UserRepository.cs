@@ -1,8 +1,7 @@
 using Sneakahs.Domain.Entities;
-using Sneakahs.Application.Interfaces;
+using Sneakahs.Application.Interfaces.Repositories;
 using Sneakahs.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace Sneakahs.Infrastructure.Repositories
 {

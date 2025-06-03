@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Sneakahs.Application.Interfaces;
+using Sneakahs.Application.Interfaces.Services;
 using Sneakahs.Domain.Entities;
 using System;
 using System.IdentityModel.Tokens.Jwt;

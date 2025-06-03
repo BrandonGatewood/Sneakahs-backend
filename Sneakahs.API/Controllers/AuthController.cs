@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Sneakahs.Application.DTO.AuthDto;
-using Sneakahs.Application.Interfaces;
-using Sneakahs.Domain.Entities;
+using Sneakahs.Application.Interfaces.Services;
 
 namespace Sneakahs.Api.Controllers
 {

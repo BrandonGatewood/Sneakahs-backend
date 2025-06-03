@@ -1,5 +1,5 @@
 using Moq;
-using Sneakahs.Application.Interfaces;
+using Sneakahs.Application.Interfaces.Repositories;
 using Sneakahs.Infrastructure.Services;
 using Xunit.Abstractions;
 
