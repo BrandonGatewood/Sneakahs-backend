@@ -42,7 +42,7 @@ namespace Sneakahs.Infrastructure.Services
         // Authenticate a user (login)
         public async Task<Result<UserResponseDto>> LoginUser(UserLoginDto loginDto)
         {
-            var user = await _userRepository.GetUserByEmail(loginDto.Email);
+            User? user = await _userRepository.GetUserByEmail(loginDto.Email);
             if (user == null || !user.CheckPassword(loginDto.Password))  // Check if user exists and password is correct
                 return Result<UserResponseDto>.Fail("Invalid credentials.");
 
