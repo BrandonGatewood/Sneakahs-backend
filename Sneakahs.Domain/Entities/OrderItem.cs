@@ -11,6 +11,7 @@ namespace Sneakahs.Domain.Entities
         public required string ProductImgUrl { get; set; } 
 
         public required int Quantity { get; set; }
+        public decimal Size { get; set; }
         public decimal PriceAtPurchase { get; set; }
     }
 }

@@ -13,8 +13,8 @@ namespace Sneakahs.Domain.Entities
         public required User User { get; set; }  
 
         public required ICollection<OrderItem> OrderItems { get; set; } = [];
-        public required decimal Tax { get; set; }
-        public required decimal ShippingCost { get; set; }
+        public decimal Tax { get; set; }
+        public decimal ShippingCost { get; set; }
         public decimal TotalAmount
         {
             get
