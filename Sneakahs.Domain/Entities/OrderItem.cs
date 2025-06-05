@@ -3,13 +3,14 @@ using Sneakahs.Domain.Common;
 namespace Sneakahs.Domain.Entities
 {
     public class OrderItem : BaseEntity {
-        public Guid OrderId { get; set; }
-        public required Order Order { get; set; }    // Navigation property for Order
+        public required Guid OrderId { get; set; }
+        public required Order Order { get; set; }
 
-        public Guid ProductId { get; set; }
-        public required Product Product { get; set; }    // Navigation property for Product
+        public required Guid ProductId { get; set; }
+        public required string ProductName { get; set; } 
+        public required string ProductImgUrl { get; set; } 
 
-        public int Quantity { get; set; }
+        public required int Quantity { get; set; }
         public decimal PriceAtPurchase { get; set; }
     }
 }

@@ -9,22 +9,25 @@ namespace Sneakahs.Domain.Entities
 {
     public class Order : BaseEntity
     {
-        public Guid UserId { get; set; }
-        public required User User { get; set; }  // Navigation property for User
+        public required Guid UserId { get; set; }
+        public required User User { get; set; }  
 
-        public required ICollection<OrderItem> OrderItems { get; set; } // Navigation property for OrderItems
-
+        public required ICollection<OrderItem> OrderItems { get; set; } = [];
+        public required decimal Tax { get; set; }
+        public required decimal ShippingCost { get; set; }
         public decimal TotalAmount
         {
             get
             {
-                return OrderItems?.Sum(item => item.Quantity * item.Product.Price) ?? 0m;
+                return OrderItems?.Sum(item => item.Quantity * item.PriceAtPurchase) + Tax + ShippingCost ?? 0m;
             }
         }
 
-        public required String ShippingAddress { get; set; }
-        public required String Status { get; set; }
+        public required string Status { get; set; }
+        public required DateTime? PaidAt { get; set; }
         public required DateTime? ShippedAt { get; set; }
-        public required DateTime OrderDate { get; set; }
+
+        public required ShippingAddress ShippingAddress { get; set; }
+        public required PaymentDetails PaymentDetails { get; set; }
     }
 }
