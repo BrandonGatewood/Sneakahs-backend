@@ -9,7 +9,7 @@ namespace Sneakahs.Infrastructure.Repositories
     {
         private readonly ApplicationDbContext _context = context;
 
-        // Get a Order by userId and OrderId
+        // Get an Order by userId and OrderId
         public async Task<Order?> GetOrder(Guid userId, Guid orderId)
         {
             return await _context.Orders
@@ -27,7 +27,6 @@ namespace Sneakahs.Infrastructure.Repositories
                 .Include(o => o.PaymentDetails)
                 .Include(o => o.ShippingAddress)
                 .Where(o => o.UserId == userId)
-                .OrderByDescending(o => o.CreatedAt)
                 .ToListAsync();
         }
 
@@ -46,6 +45,13 @@ namespace Sneakahs.Infrastructure.Repositories
                 .Include(o => o.PaymentDetails)
                 .Include(o => o.ShippingAddress)
                 .FirstOrDefaultAsync(o => o.PaymentDetails.StripePaymentIntentId == stripePaymentIntentId);
+        }
+
+        // Update Order after payment confirmed
+        public async Task UpdateOrder(Order order)
+        {
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
         }
     }
 }

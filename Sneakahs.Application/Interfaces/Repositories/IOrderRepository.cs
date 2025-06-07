@@ -8,5 +8,6 @@ namespace Sneakahs.Application.Interfaces.Repositories
         Task<List<Order>> GetAllOrders(Guid userId);
         Task CreateOrder(Order newOrder);
         Task<Order?> GetOrderByStripeIntentId(string stripePaymentIntentId);
+        Task UpdateOrder(Order order);
     }
 }

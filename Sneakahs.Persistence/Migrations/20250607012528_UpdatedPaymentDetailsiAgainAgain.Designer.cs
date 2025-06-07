@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sneakahs.Persistence.Data;
@@ -11,9 +12,11 @@ using Sneakahs.Persistence.Data;
 namespace Sneakahs.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250607012528_UpdatedPaymentDetailsiAgainAgain")]
+    partial class UpdatedPaymentDetailsiAgainAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,6 +84,9 @@ namespace Sneakahs.Persistence.Migrations
                     b.Property<DateTime?>("PaidAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("PaymentDetailsId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("ShippedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -98,6 +104,8 @@ namespace Sneakahs.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PaymentDetailsId");
 
                     b.HasIndex("UserId");
 
@@ -149,9 +157,6 @@ namespace Sneakahs.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
@@ -164,9 +169,6 @@ namespace Sneakahs.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId")
-                        .IsUnique();
 
                     b.ToTable("PaymentDetails");
                 });
@@ -334,11 +336,19 @@ namespace Sneakahs.Persistence.Migrations
 
             modelBuilder.Entity("Sneakahs.Domain.Entities.Order", b =>
                 {
+                    b.HasOne("Sneakahs.Domain.Entities.PaymentDetails", "PaymentDetails")
+                        .WithMany()
+                        .HasForeignKey("PaymentDetailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Sneakahs.Domain.Entities.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PaymentDetails");
 
                     b.Navigation("User");
                 });
@@ -352,15 +362,6 @@ namespace Sneakahs.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("Sneakahs.Domain.Entities.PaymentDetails", b =>
-                {
-                    b.HasOne("Sneakahs.Domain.Entities.Order", null)
-                        .WithOne("PaymentDetails")
-                        .HasForeignKey("Sneakahs.Domain.Entities.PaymentDetails", "OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Sneakahs.Domain.Entities.ProductSize", b =>
@@ -391,9 +392,6 @@ namespace Sneakahs.Persistence.Migrations
             modelBuilder.Entity("Sneakahs.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
-
-                    b.Navigation("PaymentDetails")
-                        .IsRequired();
 
                     b.Navigation("ShippingAddress")
                         .IsRequired();

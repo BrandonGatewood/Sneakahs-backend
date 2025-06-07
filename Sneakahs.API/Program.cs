@@ -19,11 +19,17 @@ Env.Load();
 var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
 var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
 var connectionString = Environment.GetEnvironmentVariable("DB_URL");
+var stripeSecretKey = Environment.GetEnvironmentVariable("STRIPE_SECRET_KEY");
 
-if(string.IsNullOrWhiteSpace(issuer) || string.IsNullOrWhiteSpace(audience))
+if (string.IsNullOrWhiteSpace(issuer) || string.IsNullOrWhiteSpace(audience))
 {
     throw new ArgumentException("Issuer and Audience must be provided");
 }
+
+// Stripe API key
+if (string.IsNullOrEmpty(stripeSecretKey))
+    throw new Exception("Stripe secret key not set in environmnet variables");
+Stripe.StripeConfiguration.ApiKey = stripeSecretKey;
 
 // Auto-generate jwt secret
 var randomBytes = new byte[32];
@@ -62,6 +68,8 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IJwtService>(provider => new JwtService(secret, issuer, audience));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
