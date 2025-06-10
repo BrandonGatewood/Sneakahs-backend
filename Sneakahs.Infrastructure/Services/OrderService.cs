@@ -123,11 +123,19 @@ namespace Sneakahs.Infrastructure.Services
             if (order == null)
                 return;
 
+            // Confirm payment
             order.PaymentDetails.Status = "Paid";
             order.PaidAt = DateTime.UtcNow;
             order.Status = "Confirmed";
-
             await _orderRepository.UpdateOrder(order);
+
+            // Update users Cart
+            Cart? cart = await _cartRepository.GetCart(order.UserId);
+            if (cart == null)
+                return;
+
+            cart.ClearCart();
+            await _cartRepository.Update(cart);
 
             // Update Quantity of product
             foreach (OrderItem orderItem in order.OrderItems)
@@ -141,7 +149,6 @@ namespace Sneakahs.Infrastructure.Services
                 product.UpdateProductSize(orderItem.Size, orderItem.Quantity);
                 await _productRepository.UpdateProduct(product);
             }
-
         }
 
         // ------------- Helper Functions -------------
