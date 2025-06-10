@@ -6,5 +6,6 @@ namespace Sneakahs.Application.Interfaces.Repositories
     {
         Task<IEnumerable<Product>> GetAllProducts();
         Task<Product?> GetProduct(Guid id);
+        Task UpdateProduct(Product product);
     }
 }

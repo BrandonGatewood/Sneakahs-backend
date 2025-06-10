@@ -6,6 +6,7 @@ using Sneakahs.Application.Interfaces.Repositories;
 using Sneakahs.Application.Interfaces.Services;
 using Sneakahs.Domain.Entities;
 using Stripe;
+using Product = Sneakahs.Domain.Entities.Product;
 
 namespace Sneakahs.Infrastructure.Services
 {
@@ -68,7 +69,7 @@ namespace Sneakahs.Infrastructure.Services
 
             foreach (CartItem cartItem in cart.CartItems.ToList())
             {
-                Domain.Entities.Product? product = await _productRepository.GetProduct(cartItem.ProductId);
+                Product? product = await _productRepository.GetProduct(cartItem.ProductId);
                 // Check if product still exists
                 if (product == null)
                     return Result<OrderDto>.Fail($"Product not found. ProductId: {cartItem.ProductId}");
@@ -97,14 +98,7 @@ namespace Sneakahs.Infrastructure.Services
             {
                 Amount = (long)(order.TotalAmount * 100),
                 Currency = "usd",
-                /*
-                    FOR TESTING CONFIRMING PAYMENT
-                */
-                
-                /*
-                    FOR TESTING FAILED PAYMENT
-                */
-                //Confirm = false,
+                PaymentMethod = "pm_card_visa",
                 Metadata = new Dictionary<string, string>
                 {
                     { "order_id", order.Id.ToString() }
@@ -127,15 +121,27 @@ namespace Sneakahs.Infrastructure.Services
         {
             Order? order = await _orderRepository.GetOrderByStripeIntentId(stripePaymentIntentId);
             if (order == null)
-            {
                 return;
-            }
 
             order.PaymentDetails.Status = "Paid";
             order.PaidAt = DateTime.UtcNow;
             order.Status = "Confirmed";
 
             await _orderRepository.UpdateOrder(order);
+
+            // Update Quantity of product
+            foreach (OrderItem orderItem in order.OrderItems)
+            {
+                // get product
+                Product? product = await _productRepository.GetProduct(orderItem.ProductId);
+
+                if (product == null)    // Couldnt find product
+                    return;
+                // Update the products Quantity
+                product.UpdateProductSize(orderItem.Size, orderItem.Quantity);
+                await _productRepository.UpdateProduct(product);
+            }
+
         }
 
         // ------------- Helper Functions -------------
@@ -143,6 +149,7 @@ namespace Sneakahs.Infrastructure.Services
         {
             return new OrderDto
             {
+                PaymentIntentId = order.PaymentDetails?.StripePaymentIntentId ?? "N/A",
                 OrderItems = [.. order.OrderItems.Select(oi => new OrderItemDto
                 {
                     Id = oi.Id,

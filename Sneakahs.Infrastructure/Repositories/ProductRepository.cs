@@ -20,5 +20,12 @@ namespace Sneakahs.Infrastructure.Repositories
             .Include(p => p.Sizes).
             FirstOrDefaultAsync(p => p.Id == id);
         }
+
+        // Update Product Quantity
+        public async Task UpdateProduct(Product product)
+        {
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+        }
     }
 }

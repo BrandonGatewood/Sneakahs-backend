@@ -9,5 +9,10 @@ namespace Sneakahs.Domain.Entities
 
         public required Guid ProductId { get; set; }
         public required Product Product { get; set; }
+
+        public void UpdateQuantity(int newQuantity)
+        {
+            Quantity -= newQuantity;
+        }
     }
 }

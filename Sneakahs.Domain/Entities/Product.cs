@@ -16,5 +16,12 @@ namespace Sneakahs.Domain.Entities
             ProductSize? productSize = Sizes.FirstOrDefault(s => s.Size == size) ?? throw new InvalidOperationException($"Size {size} is not available for this product.");
             return productSize.Quantity;
         }
+
+        public void UpdateProductSize(decimal size, int newQuantity)
+        {
+            ProductSize? productSize = Sizes.FirstOrDefault(s => s.Size == size) ?? throw new InvalidOperationException($"Size {size} is not available for this product.");
+
+            productSize.UpdateQuantity(newQuantity);
+        }
     }
 }
