@@ -10,11 +10,12 @@ using Product = Sneakahs.Domain.Entities.Product;
 
 namespace Sneakahs.Infrastructure.Services
 {
-    public class OrderService(IOrderRepository orderRepository, ICartRepository cartRepository, IProductRepository productRepository) : IOrderService
+    public class OrderService(IOrderRepository orderRepository, ICartRepository cartRepository, IProductRepository productRepository, IStripeService stripeService) : IOrderService
     {
         private readonly IOrderRepository _orderRepository = orderRepository;
         private readonly ICartRepository _cartRepository = cartRepository;
         private readonly IProductRepository _productRepository = productRepository;
+        private readonly IStripeService _stripeService = stripeService;
 
         // Find all Orders associated with userId
         public async Task<Result<List<OrderDto>>> GetAllOrders(Guid userId)
@@ -25,10 +26,13 @@ namespace Sneakahs.Infrastructure.Services
                 return Result<List<OrderDto>>.Fail("No Orders yet. GO BUY SOMETING PLEASE");
 
             List<OrderDto> ordersDto = [];
+
+            // Convert every Order to OrderDto
             foreach (Order order in orders)
             {
                 ordersDto.Add(ToDto(order));
             }
+
             return Result<List<OrderDto>>.Ok(ordersDto);
         }
 
@@ -93,24 +97,7 @@ namespace Sneakahs.Infrastructure.Services
             }
 
             // Create a new payment with Stripe
-            PaymentIntentService? paymentIntentService = new();
-            PaymentIntent? paymentIntent = await paymentIntentService.CreateAsync(new PaymentIntentCreateOptions
-            {
-                Amount = (long)(order.TotalAmount * 100),
-                Currency = "usd",
-                PaymentMethod = "pm_card_visa",
-                Metadata = new Dictionary<string, string>
-                {
-                    { "order_id", order.Id.ToString() }
-                },
-                AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
-                {
-                    Enabled = true,
-                    AllowRedirects = "never"
-                }
-            });
-
-            order.PaymentDetails.StripePaymentIntentId = paymentIntent.Id;
+            order.PaymentDetails.StripePaymentIntentId = await _stripeService.CreatePaymentIntent(order);
 
             await _orderRepository.CreateOrder(order);
 
@@ -137,6 +124,10 @@ namespace Sneakahs.Infrastructure.Services
             cart.ClearCart();
             await _cartRepository.UpdateCart(cart);
 
+
+            /*
+                MOVE THIS TO HELPER FUNCTION
+            */
             // Update Quantity of product
             foreach (OrderItem orderItem in order.OrderItems)
             {
