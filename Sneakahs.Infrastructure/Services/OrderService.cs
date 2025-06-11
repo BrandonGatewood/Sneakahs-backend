@@ -135,7 +135,7 @@ namespace Sneakahs.Infrastructure.Services
                 return;
 
             cart.ClearCart();
-            await _cartRepository.Update(cart);
+            await _cartRepository.UpdateCart(cart);
 
             // Update Quantity of product
             foreach (OrderItem orderItem in order.OrderItems)

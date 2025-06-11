@@ -46,7 +46,7 @@ namespace Sneakahs.Infrastructure.Repositories
         }
 
         // Update existing User's Cart with updatedCart
-        public async Task Update(Cart updatedCart)
+        public async Task UpdateCart(Cart updatedCart)
         {
             _context.Carts.Update(updatedCart);
             await _context.SaveChangesAsync();

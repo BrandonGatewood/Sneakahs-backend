@@ -119,7 +119,7 @@ namespace Sneakahs.Infrastructure.Services
 
             cart.ClearCart();
 
-            await _cartRepository.Update(cart);
+            await _cartRepository.UpdateCart(cart);
 
             return ToDto(cart);
         }
