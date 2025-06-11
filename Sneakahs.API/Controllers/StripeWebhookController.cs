@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 using Sneakahs.Application.Interfaces.Services;
 using Stripe;
 
@@ -8,16 +6,10 @@ namespace Sneakahs.API.Controllers
 {
     [Route("webhook/stripe")]
     [ApiController]
-    public class StripeWebhookController : ControllerBase
+    public class StripeWebhookController(IOrderService orderService) : ControllerBase
     {
-        private readonly IOrderService _orderService;
-        private readonly string? _webhookSecret;
-
-        public StripeWebhookController(IOrderService orderService)
-        {
-            _orderService = orderService;
-            _webhookSecret = Environment.GetEnvironmentVariable("STRIPE_WEBHOOK_SECRET");
-        }
+        private readonly IOrderService _orderService = orderService;
+        private readonly string? _webhookSecret = Environment.GetEnvironmentVariable("STRIPE_WEBHOOK_SECRET");
 
         [HttpPost]
         public async Task<IActionResult> Handle()

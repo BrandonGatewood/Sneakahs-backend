@@ -1,6 +1,7 @@
 using Sneakahs.Application.Common;
 using Sneakahs.Application.DTO.OrderDto;
 using Sneakahs.Application.DTO.OrderItemDto;
+using Sneakahs.Application.DTO.ShippingAddressDto;
 using Sneakahs.Application.Interfaces.Repositories;
 using Sneakahs.Application.Interfaces.Services;
 using Sneakahs.Domain.Entities;

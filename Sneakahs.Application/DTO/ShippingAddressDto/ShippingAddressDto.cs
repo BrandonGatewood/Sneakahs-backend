@@ -1,6 +1,4 @@
-using Sneakahs.Domain.Entities;
-
-namespace Sneakahs.Application.DTO.OrderDto
+namespace Sneakahs.Application.DTO.ShippingAddressDto
 {
     public class ShippingAddressDto
     {

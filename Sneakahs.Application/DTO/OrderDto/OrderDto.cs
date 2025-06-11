@@ -1,5 +1,3 @@
-using Sneakahs.Domain.Entities;
-
 namespace Sneakahs.Application.DTO.OrderDto
 {
     public class OrderDto
@@ -14,6 +12,6 @@ namespace Sneakahs.Application.DTO.OrderDto
         public required DateTime? PaidAt { get; set; }
         public required DateTime? ShippedAt { get; set; }
 
-        public required ShippingAddressDto ShippingAddressDto { get; set; }
+        public required ShippingAddressDto.ShippingAddressDto ShippingAddressDto { get; set; }
     }
 }

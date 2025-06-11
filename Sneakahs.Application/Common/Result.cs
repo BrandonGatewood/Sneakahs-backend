@@ -1,5 +1,3 @@
-using System.Linq.Expressions;
-
 namespace Sneakahs.Application.Common
 {
     public class Result<T>
@@ -23,6 +21,5 @@ namespace Sneakahs.Application.Common
         {
             return new Result<T>(false, error, default!);
         }
-
     }
 }
