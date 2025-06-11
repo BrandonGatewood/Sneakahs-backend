@@ -1,11 +1,9 @@
-using System.Runtime.InteropServices;
 using Sneakahs.Application.Common;
 using Sneakahs.Application.DTO.OrderDto;
 using Sneakahs.Application.DTO.OrderItemDto;
 using Sneakahs.Application.Interfaces.Repositories;
 using Sneakahs.Application.Interfaces.Services;
 using Sneakahs.Domain.Entities;
-using Stripe;
 using Product = Sneakahs.Domain.Entities.Product;
 
 namespace Sneakahs.Infrastructure.Services
@@ -23,15 +21,10 @@ namespace Sneakahs.Infrastructure.Services
             List<Order> orders = await _orderRepository.GetAllOrders(userId);
 
             if (orders.Count == 0)
-                return Result<List<OrderDto>>.Fail("No Orders yet. GO BUY SOMETING PLEASE");
-
-            List<OrderDto> ordersDto = [];
+                return Result<List<OrderDto>>.Fail("No Orders yet.");
 
             // Convert every Order to OrderDto
-            foreach (Order order in orders)
-            {
-                ordersDto.Add(ToDto(order));
-            }
+            List<OrderDto> ordersDto = [.. orders.Select(ToDto)];
 
             return Result<List<OrderDto>>.Ok(ordersDto);
         }
@@ -56,6 +49,49 @@ namespace Sneakahs.Infrastructure.Services
                 return Result<OrderDto>.Fail("Cart is empty");
 
             // Create a new Order for User 
+            Result<Order> order = await BuildOrder(userId, cart, orderRequestDto);
+            if (!order.Success)
+                return Result<OrderDto>.Fail(order.Error);
+
+            // Create a new payment with Stripe
+            Result<string> paymentIntentResult = await _stripeService.CreatePaymentIntent(order.Data);
+
+            if (!paymentIntentResult.Success)
+                return Result<OrderDto>.Fail(paymentIntentResult.Error);
+            order.Data.PaymentDetails.StripePaymentIntentId = paymentIntentResult.Data;
+
+            await _orderRepository.CreateOrder(order.Data);
+
+            return Result<OrderDto>.Ok(ToDto(order.Data));
+        }
+
+        public async Task ConfirmPayment(string stripePaymentIntentId)
+        {
+            Order? order = await _orderRepository.GetOrderByStripeIntentId(stripePaymentIntentId);
+            if (order == null)
+                return;
+
+            // Confirm payment
+            order.PaymentDetails.Status = "Paid";
+            order.PaidAt = DateTime.UtcNow;
+            order.Status = "Confirmed";
+            await _orderRepository.UpdateOrder(order);
+
+            // Update users Cart
+            Cart? cart = await _cartRepository.GetCart(order.UserId);
+            if (cart == null)
+                return;
+
+            // Clear cart and update to DB
+            await ClearUsersCart(cart);
+
+            // Update Quantity of product
+            await UpdateProductQuantity([.. order.OrderItems]);
+        }
+
+        // ------------- Helper Functions -------------
+        private async Task<Result<Order>> BuildOrder(Guid userId, Cart cart, OrderRequestDto orderRequestDto)
+        {
             Order order = new()
             {
                 UserId = userId,
@@ -76,11 +112,11 @@ namespace Sneakahs.Infrastructure.Services
                 Product? product = await _productRepository.GetProduct(cartItem.ProductId);
                 // Check if product still exists
                 if (product == null)
-                    return Result<OrderDto>.Fail($"Product not found. ProductId: {cartItem.ProductId}");
+                    return Result<Order>.Fail($"Product not found. ProductId: {cartItem.ProductId}");
 
                 // Check if theres enough quantity for product size
                 if (product.GetAvailableQuantityForSize(cartItem.Size) < cartItem.Quantity)
-                    return Result<OrderDto>.Fail($"Not enough stock. Available: {product.GetAvailableQuantityForSize(cartItem.Size)}");
+                    return Result<Order>.Fail($"Not enough stock. Available: {product.GetAvailableQuantityForSize(cartItem.Size)}");
 
                 // Add the CartItem to OrderItems
                 order.OrderItems.Add(new OrderItem
@@ -96,53 +132,34 @@ namespace Sneakahs.Infrastructure.Services
                 });
             }
 
-            // Create a new payment with Stripe
-            order.PaymentDetails.StripePaymentIntentId = await _stripeService.CreatePaymentIntent(order);
-
-            await _orderRepository.CreateOrder(order);
-
-            return Result<OrderDto>.Ok(ToDto(order));
+            return Result<Order>.Ok(order);
         }
 
-        public async Task ConfirmPayment(string stripePaymentIntentId)
+        // Clears the Users Cart
+        private async Task ClearUsersCart(Cart cart)
         {
-            Order? order = await _orderRepository.GetOrderByStripeIntentId(stripePaymentIntentId);
-            if (order == null)
-                return;
-
-            // Confirm payment
-            order.PaymentDetails.Status = "Paid";
-            order.PaidAt = DateTime.UtcNow;
-            order.Status = "Confirmed";
-            await _orderRepository.UpdateOrder(order);
-
-            // Update users Cart
-            Cart? cart = await _cartRepository.GetCart(order.UserId);
-            if (cart == null)
-                return;
-
             cart.ClearCart();
             await _cartRepository.UpdateCart(cart);
+        }
 
-
-            /*
-                MOVE THIS TO HELPER FUNCTION
-            */
-            // Update Quantity of product
-            foreach (OrderItem orderItem in order.OrderItems)
+        // Updates the product quantity in the database
+        private async Task UpdateProductQuantity(List<OrderItem> orderItems)
+        {
+            foreach (OrderItem orderItem in orderItems)
             {
                 // get product
                 Product? product = await _productRepository.GetProduct(orderItem.ProductId);
 
                 if (product == null)    // Couldnt find product
                     return;
+
                 // Update the products Quantity
                 product.UpdateProductSize(orderItem.Size, orderItem.Quantity);
                 await _productRepository.UpdateProduct(product);
             }
         }
 
-        // ------------- Helper Functions -------------
+        // Converts an Order to an OrderDto, returning only neccessary information
         private static OrderDto ToDto(Order order)
         {
             return new OrderDto
@@ -165,7 +182,17 @@ namespace Sneakahs.Infrastructure.Services
                 ShippedAt = order.ShippedAt,
 
                 // Change to shippding address dto
-                ShippingAddress = order.ShippingAddress,
+                ShippingAddressDto = new ShippingAddressDto()
+                {
+                    FullName = order.ShippingAddress.FullName,
+                    AddressLine1 = order.ShippingAddress.AddressLine1,
+                    AddressLine2 = order.ShippingAddress.AddressLine2,
+                    City = order.ShippingAddress.City,
+                    State = order.ShippingAddress.State,
+                    PostalCode = order.ShippingAddress.PostalCode,
+                    Country = order.ShippingAddress.Country,
+                    PhoneNumber = order.ShippingAddress.PhoneNumber
+                }
             };
         }
     }

@@ -14,6 +14,6 @@ namespace Sneakahs.Application.DTO.OrderDto
         public required DateTime? PaidAt { get; set; }
         public required DateTime? ShippedAt { get; set; }
 
-        public required ShippingAddress ShippingAddress { get; set; }
+        public required ShippingAddressDto ShippingAddressDto { get; set; }
     }
 }
