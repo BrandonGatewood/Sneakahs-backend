@@ -107,7 +107,7 @@ namespace Sneakahs.Infrastructure.Services
             };
             order.PaymentDetails.OrderId = order.Id;
 
-            foreach (CartItem cartItem in cart.CartItems.ToList())
+            foreach (CartItem cartItem in cart.CartItems)
             {
                 Product? product = await _productRepository.GetProduct(cartItem.ProductId);
                 // Check if product still exists
@@ -151,7 +151,7 @@ namespace Sneakahs.Infrastructure.Services
                 Product? product = await _productRepository.GetProduct(orderItem.ProductId);
 
                 if (product == null)    // Couldnt find product
-                    return;
+                    continue;
 
                 // Update the products Quantity
                 product.UpdateProductSize(orderItem.Size, orderItem.Quantity);
@@ -181,18 +181,23 @@ namespace Sneakahs.Infrastructure.Services
                 PaidAt = order.PaidAt,
                 ShippedAt = order.ShippedAt,
 
-                // Change to shippding address dto
-                ShippingAddressDto = new ShippingAddressDto()
-                {
-                    FullName = order.ShippingAddress.FullName,
-                    AddressLine1 = order.ShippingAddress.AddressLine1,
-                    AddressLine2 = order.ShippingAddress.AddressLine2,
-                    City = order.ShippingAddress.City,
-                    State = order.ShippingAddress.State,
-                    PostalCode = order.ShippingAddress.PostalCode,
-                    Country = order.ShippingAddress.Country,
-                    PhoneNumber = order.ShippingAddress.PhoneNumber
-                }
+                ShippingAddressDto = ShippingAddressToDto(order.ShippingAddress)
+            };
+        }
+
+        // Converts ShippingAddress to ShippingAddressDto
+        private static ShippingAddressDto ShippingAddressToDto(ShippingAddress shippingAddress)
+        {
+            return new ShippingAddressDto
+            {
+                FullName = shippingAddress.FullName,
+                AddressLine1 = shippingAddress.AddressLine1,
+                AddressLine2 = shippingAddress.AddressLine2,
+                City = shippingAddress.City,
+                State = shippingAddress.State,
+                PostalCode = shippingAddress.PostalCode,
+                Country = shippingAddress.Country,
+                PhoneNumber = shippingAddress.PhoneNumber
             };
         }
     }
