@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Sneakahs.Application.Common;
 using Sneakahs.Application.DTO.OrderDto;
 using Sneakahs.Application.DTO.OrderItemDto;
@@ -5,12 +6,14 @@ using Sneakahs.Application.DTO.ShippingAddressDto;
 using Sneakahs.Application.Interfaces.Repositories;
 using Sneakahs.Application.Interfaces.Services;
 using Sneakahs.Domain.Entities;
+using Sneakahs.Persistence.Data;
 using Product = Sneakahs.Domain.Entities.Product;
 
 namespace Sneakahs.Infrastructure.Services
 {
-    public class OrderService(IOrderRepository orderRepository, ICartRepository cartRepository, IProductRepository productRepository, IStripeService stripeService) : IOrderService
+    public class OrderService(ApplicationDbContext context, IOrderRepository orderRepository, ICartRepository cartRepository, IProductRepository productRepository, IStripeService stripeService) : IOrderService
     {
+        private readonly ApplicationDbContext _context = context;
         private readonly IOrderRepository _orderRepository = orderRepository;
         private readonly ICartRepository _cartRepository = cartRepository;
         private readonly IProductRepository _productRepository = productRepository;
@@ -44,50 +47,78 @@ namespace Sneakahs.Infrastructure.Services
         // Create an Order associated with userId
         public async Task<Result<OrderDto>> CreateOrder(Guid userId, OrderRequestDto orderRequestDto)
         {
-            // Get Users Cart
-            Cart? cart = await _cartRepository.GetCart(userId);
-            if (cart == null || cart.CartItems.Count == 0)
-                return Result<OrderDto>.Fail("Cart is empty");
+            // Use BeginTransactionAsync so that if payment were to fail, then updating product quantity and clearing cart doesnt process
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
-            // Create a new Order for User 
-            Result<Order> order = await BuildOrder(userId, cart, orderRequestDto);
-            if (!order.Success)
-                return Result<OrderDto>.Fail(order.Error);
+            try
+            {
+                // Get Users Cart
+                Cart? cart = await _cartRepository.GetCart(userId);
+                if (cart == null || cart.CartItems.Count == 0)
+                    return Result<OrderDto>.Fail("Cart is empty");
 
-            // Create a new payment with Stripe
-            Result<string> paymentIntentResult = await _stripeService.CreatePaymentIntent(order.Data);
+                // Create a new Order for User 
+                Result<Order> order = await BuildOrder(userId, cart, orderRequestDto);
+                if (!order.Success)
+                    return Result<OrderDto>.Fail(order.Error);
 
-            if (!paymentIntentResult.Success)
-                return Result<OrderDto>.Fail(paymentIntentResult.Error);
-            order.Data.PaymentDetails.StripePaymentIntentId = paymentIntentResult.Data;
+                // Create a new payment with Stripe
+                Result<string> paymentIntentResult = await _stripeService.CreatePaymentIntent(order.Data);
 
-            await _orderRepository.CreateOrder(order.Data);
+                if (!paymentIntentResult.Success)
+                    return Result<OrderDto>.Fail(paymentIntentResult.Error);
+                order.Data.PaymentDetails.StripePaymentIntentId = paymentIntentResult.Data;
 
-            return Result<OrderDto>.Ok(ToDto(order.Data));
+                await _orderRepository.CreateOrder(order.Data);
+
+                // Commit the transaction
+                await transaction.CommitAsync();
+
+                return Result<OrderDto>.Ok(ToDto(order.Data));
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return Result<OrderDto>.Fail("Transaction failed. " + ex.Message);
+            }
         }
 
         public async Task ConfirmPayment(string stripePaymentIntentId)
         {
-            Order? order = await _orderRepository.GetOrderByStripeIntentId(stripePaymentIntentId);
-            if (order == null)
-                return;
+            // Use BeginTransactionAsync so that if payment were to fail, then updating product quantity and clearing cart doesnt process
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
-            // Confirm payment
-            order.PaymentDetails.Status = "Paid";
-            order.PaidAt = DateTime.UtcNow;
-            order.Status = "Confirmed";
-            await _orderRepository.UpdateOrder(order);
+            try
+            {
+                Order? order = await _orderRepository.GetOrderByStripeIntentId(stripePaymentIntentId);
+                if (order == null)
+                    return;
 
-            // Update users Cart
-            Cart? cart = await _cartRepository.GetCart(order.UserId);
-            if (cart == null)
-                return;
+                // Confirm payment
+                order.PaymentDetails.Status = "Paid";
+                order.PaidAt = DateTime.UtcNow;
+                order.Status = "Confirmed";
+                await _orderRepository.UpdateOrder(order);
 
-            // Clear cart and update to DB
-            await ClearUsersCart(cart);
+                // Update users Cart
+                Cart? cart = await _cartRepository.GetCart(order.UserId);
+                if (cart == null)
+                    return;
 
-            // Update Quantity of product
-            await UpdateProductQuantity([.. order.OrderItems]);
+                // Clear cart and update to DB
+                await ClearUsersCart(cart);
+
+                // Update Quantity of product
+                await UpdateProductQuantity([.. order.OrderItems]);
+
+                // Commit the transaction
+                await transaction.CommitAsync();
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         // ------------- Helper Functions -------------
