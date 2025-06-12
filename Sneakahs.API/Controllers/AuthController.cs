@@ -18,7 +18,7 @@ namespace Sneakahs.Api.Controllers
         /// Registers a user and returns a JWT upon successful registration.
         /// </summary>
         /// <param name ="userRegisterDto">User registration data including username, email, and password.</param>
-        /// <returns>200 OK with a JWT if successful; otherwise 404 Bad Request.</returns> 
+        /// <returns>200 OK with a JWT if successful; otherwise 400 Bad Request.</returns> 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto userRegisterDto)
         {
