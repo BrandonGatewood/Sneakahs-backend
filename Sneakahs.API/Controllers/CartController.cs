@@ -9,8 +9,8 @@ using Sneakahs.Application.Interfaces.Services;
 namespace Sneakahs.API.Controllers
 {
     /// <summary>
-    /// Handles user cart operations such ass getting the cart,
-    /// adding, updating, deleting items, and clearing the cart
+    /// Handles user cart operations such as getting the cart,
+    /// adding, updating, deleting items, and clearing the cart.
     /// </summary>
     [Authorize]
     [Route("cart")]
@@ -22,8 +22,10 @@ namespace Sneakahs.API.Controllers
         {
             get
             {
+                // Find claim with type "NameIdentifier"
                 var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
+                // Claim not found
                 if (userIdClaim == null)
                     return Guid.Empty;
 
@@ -32,9 +34,9 @@ namespace Sneakahs.API.Controllers
         }
 
         /// <summary>
-        /// Gets the Cart for the authenticated user.
+        /// Gets the cart for the authenticated user.
         /// </summary>
-        /// <returns>200 OK with a CartDto.</returns> 
+        /// <returns>200 OK with a cartDto.</returns> 
         [HttpGet]
         public async Task<IActionResult> GetCart()
         {
@@ -48,7 +50,7 @@ namespace Sneakahs.API.Controllers
         /// Add a new item to cart for the authenticated user.
         /// </summary>
         /// <param name="cartItemRequestDto">Add item to cart data (productId, size, quantity).</param>
-        /// <returns>200 OK with a CartDto if successful; otherwise 404 Not Found.</returns> 
+        /// <returns>200 OK with a cartDto if successful; otherwise 404 Not Found.</returns> 
         [HttpPost("items")]
         public async Task<IActionResult> AddCartItem([FromBody] CartItemRequestDto cartItemRequestDto)
         {
@@ -67,7 +69,7 @@ namespace Sneakahs.API.Controllers
         /// </summary>
         /// <param name="cartItemId">CartItem data (cartItemId).</param>
         /// <param name="cartItemUpdateDto">Update an item in cart data (productId, quantity).</param>
-        /// <returns>200 OK with a CartDto if successful; otherwise 404 Not Found.</returns> 
+        /// <returns>200 OK with a cartDto if successful; otherwise 404 Not Found.</returns> 
         [HttpPost("items/{cartItemId}")]
         public async Task<IActionResult> UpdateCartItem(Guid cartItemId, [FromBody] CartItemUpdateDto cartItemUpdateDto)
         {
@@ -85,7 +87,7 @@ namespace Sneakahs.API.Controllers
         /// Delete an item in cart for the authenticated user.
         /// </summary>
         /// <param name="cartItemId">CartItem data (cartItemId).</param>
-        /// <returns>200 OK with a CartDto if successful; otherwise 404 Not Found.</returns> 
+        /// <returns>200 OK with a cartDto if successful; otherwise 404 Not Found.</returns> 
         [HttpDelete("items/{cartItemId}")]
         public async Task<IActionResult> RemoveCartItem(Guid cartItemId)
         {
@@ -102,7 +104,7 @@ namespace Sneakahs.API.Controllers
         /// <summary>
         /// Clear the cart for the authenticated user.
         /// </summary>
-        /// <returns>200 OK with a CartDto.</returns> 
+        /// <returns>200 OK with a cartDto.</returns> 
         [HttpDelete("items")]
         public async Task<IActionResult> ClearCart()
         {
