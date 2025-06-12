@@ -47,7 +47,7 @@ namespace Sneakahs.Infrastructure.Services
         // Create an Order associated with userId
         public async Task<Result<OrderDto>> CreateOrder(Guid userId, OrderRequestDto orderRequestDto)
         {
-            // Use BeginTransactionAsync so that if payment were to fail, then updating product quantity and clearing cart doesnt process
+            // All operations inside a transaction either all succeed or all fail.
             using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
@@ -85,7 +85,7 @@ namespace Sneakahs.Infrastructure.Services
 
         public async Task ConfirmPayment(string stripePaymentIntentId)
         {
-            // Use BeginTransactionAsync so that if payment were to fail, then updating product quantity and clearing cart doesnt process
+            // All operations inside a transaction either all succeed or all fail.
             using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
