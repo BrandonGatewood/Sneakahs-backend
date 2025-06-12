@@ -11,11 +11,22 @@ namespace Sneakahs.Api.Controllers
     {
         private readonly IAuthService _authService = authService;
 
+        /// <summary>
+        /// Registers a user and returns a JWT upon successful registration.
+        /// </summary>
+        /// <param name ="userRegisterDto">
+        /// User registration data including username, email, and password.
+        /// </param name ="userRegisterDto">
+        /// <returns> 
+        /// 200 OK with a JWT if successful; otherwise 404 Bad Request.
+        /// </returns> 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto userRegisterDto)
         {
+            // Validate request and register user
             Result<UserResponseDto> result = await _authService.RegisterUser(userRegisterDto);
 
+            // Registration failed
             if (!result.Success)
             {
                 return BadRequest(result.Error);
@@ -24,11 +35,22 @@ namespace Sneakahs.Api.Controllers
             return Ok(result.Data);
         }
 
+        /// <summary>
+        /// Logs in a user and returns a JWT upon successful login.
+        /// </summary>
+        /// <param name ="userLoginDto">
+        /// User login data including email and password.
+        /// </param name ="userLoginDto">
+        /// <returns> 
+        /// 200 OK with a JWT if successful; otherwise 401 Unauthorized. 
+        /// </returns> 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
         {
+            // Validate request and authenticate user
             Result<UserResponseDto> result = await _authService.LoginUser(userLoginDto);
 
+            // Authentication failed
             if (!result.Success)
             {
                 return BadRequest(result.Error);
