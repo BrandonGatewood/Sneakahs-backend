@@ -5,6 +5,9 @@ using Sneakahs.Application.Interfaces.Services;
 
 namespace Sneakahs.Api.Controllers
 {
+    /// <summary>
+    /// Handles users authentication operations such as registration and login.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class AuthController(IAuthService authService) : ControllerBase
@@ -14,12 +17,8 @@ namespace Sneakahs.Api.Controllers
         /// <summary>
         /// Registers a user and returns a JWT upon successful registration.
         /// </summary>
-        /// <param name ="userRegisterDto">
-        /// User registration data including username, email, and password.
-        /// </param name ="userRegisterDto">
-        /// <returns> 
-        /// 200 OK with a JWT if successful; otherwise 404 Bad Request.
-        /// </returns> 
+        /// <param name ="userRegisterDto">User registration data including username, email, and password.</param>
+        /// <returns>200 OK with a JWT if successful; otherwise 404 Bad Request.</returns> 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto userRegisterDto)
         {
@@ -38,12 +37,8 @@ namespace Sneakahs.Api.Controllers
         /// <summary>
         /// Logs in a user and returns a JWT upon successful login.
         /// </summary>
-        /// <param name ="userLoginDto">
-        /// User login data including email and password.
-        /// </param name ="userLoginDto">
-        /// <returns> 
-        /// 200 OK with a JWT if successful; otherwise 401 Unauthorized. 
-        /// </returns> 
+        /// <param name ="userLoginDto">User login data including email and password.</param>
+        /// <returns> 200 OK with a JWT if successful; otherwise 401 Unauthorized.</returns> 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
         {
