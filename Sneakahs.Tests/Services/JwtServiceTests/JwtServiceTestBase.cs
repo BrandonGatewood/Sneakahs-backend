@@ -1,4 +1,3 @@
-using System.Text;
 using Sneakahs.Infrastructure.Services;
 using Xunit.Abstractions;
 
