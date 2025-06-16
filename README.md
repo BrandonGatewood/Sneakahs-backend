@@ -35,10 +35,25 @@ This is a fully functional ecommerce backend API built with **C# and ASP.NET Cor
 
 ## 📁 Folder Structure
 
-Sneakahs.API/ # Web API entry point (controllers, config)
-Sneakahs.Application/ # Business logic, DTOs, service interfaces
-Sneakahs.Infrastructure/ # JWT, Stripe, DB access, implementations
-Sneakahs.Domain/ # Core entities, enums, interfaces
+Sneakahs.API/ # Web API entry point (controllers, program config, DI)
+├── Controllers/ # API endpoints
+├── appsettings.json # Configuration
+├── Program.cs # Main entry point
+
+Sneakahs.Application/ # Application layer (business logic)
+├── DTO/ # Data Transfer Objects
+├── Interfaces/ # Service and repository interfaces
+├── Services/ # Core service interfaces
+
+Sneakahs.Infrastructure/ # Infrastructure layer (implementations)
+├── Persistence/ # Database context and migrations
+├── Services/ # JWT, Stripe, and service implementations
+├── DependencyInjection/ # DI registration
+
+Sneakahs.Domain/ # Domain layer (core entities)
+├── Entities/ # Domain models like User, Product, CartItem
+├── Enums/ # Shared enums
+├── Interfaces/ # Domain-level interfaces
 
 ---
 
