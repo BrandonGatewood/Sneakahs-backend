@@ -35,12 +35,14 @@ This is a fully functional ecommerce backend API built with **C# and ASP.NET Cor
 
 ## 📁 Folder Structure
 
+```bash
 Sneakahs.API/ # Web API entry point (controllers, config, DI setup)
 Sneakahs.Application/ # Business logic and service contracts
 Sneakahs.Domain/ # Core domain models and enums
 Sneakahs.Infrastructure/ # Service implementations (JWT, Stripe, etc.)
 Sneakahs.Persistence/ # Database configuration and access
 Sneakahs.Tests/ # Unit tests
+```
 
 ---
 
